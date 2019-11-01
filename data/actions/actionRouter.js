@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     .catch(() => res.status(500).json({ error: "The action's information could not be retrieved." }));
 })
 
-router.get('/:id', (req,res) => {
+router.get('/:id', validateActionsId, (req,res) => {
     actionsdb.get(req.params.id)
       .then(action => {
           res.status(200).json(action);
@@ -25,7 +25,7 @@ router.post('/', (req,res) => {
       .catch(() => res.status(500).json({ error: "There was an error adding the action."}));
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateActionsId, (req, res) => {
     actionsdb.remove(req.params.id)
       .then(action => {
           res.status(200).json(action);
@@ -33,12 +33,25 @@ router.delete('/:id', (req, res) => {
       .catch(() => res.status(500).json({ error: "There was an error deleting the action."}));
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateActionsId, (req, res) => {
     actionsdb.update(req.params.id, req.body)
       .then(action => {
           res.status(200).json(action);
       })
       .catch(() => res.status(500).json({ error: "There was an error updating the action."}));
 })
+
+function validateActionsId(req, res, next) {
+    actionsdb.get(req.params.id)
+      .then(action => {
+          if (action) {
+              next();
+          } else {
+              res.status(400).json({ error: "ID not found"})
+          }
+      })
+      .catch(() => res.status(500).json({ error: "There was an error"}));
+}
+
 
 module.exports = router;
