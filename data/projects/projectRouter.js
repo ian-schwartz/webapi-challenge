@@ -17,6 +17,14 @@ router.get('/:id', (req,res) => {
       .catch(() => res.status(500).json({ error: "The project's information could not be retrieved." }));
 })
 
+router.get('/:id/actions', (req, res) => {
+    projectsdb.getProjectActions(req.params.id)
+      .then(project => {
+          res.status(200).json(project);
+      })
+      .catch(() => res.status(500).json({ error: "The project's information could not be retrieved." }));
+})
+
 router.post('/', (req,res) => {
     projectsdb.insert(req.body)
       .then(project => {
@@ -25,13 +33,13 @@ router.post('/', (req,res) => {
       .catch(() => res.status(500).json({ error: "There was an error adding the project."}));
 })
 
-router.delete('/:id'), (req, res) => {
+router.delete('/:id', (req, res) => {
     projectsdb.remove(req.params.id)
       .then(project => {
-          res.status(200).json(project);
+        res.status(200).json(project)
       })
       .catch(() => res.status(500).json({ error: "There was an error deleting the project."}));
-}
+})
 
 router.put('/:id', (req, res) => {
     projectsdb.update(req.params.id, req.body)
@@ -39,14 +47,6 @@ router.put('/:id', (req, res) => {
           res.status(200).json(project);
       })
       .catch(() => res.status(500).json({ error: "There was an error updating the project."}));
-})
-
-router.get('/:id/actions', (req, res) => {
-    projectsdb.getProjectActions(req.params.id)
-      .then(project => {
-          res.status(200).json(project);
-      })
-      .catch(() => res.status(500).json({ error: "The project's information could not be retrieved." }));
 })
 
 module.exports = router;
