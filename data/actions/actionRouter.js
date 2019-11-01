@@ -11,8 +11,8 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req,res) => {
     actionsdb.get(req.params.id)
-      .then(project => {
-          res.status(200).json(project);
+      .then(action => {
+          res.status(200).json(action);
       })
       .catch(() => res.status(500).json({ error: "The action's information could not be retrieved." }));
 })
@@ -39,14 +39,6 @@ router.put('/:id', (req, res) => {
           res.status(200).json(action);
       })
       .catch(() => res.status(500).json({ error: "There was an error updating the action."}));
-})
-
-router.get('/:id/actions', (req, res) => {
-    actionsdb.getProjectActions(req.params.id)
-      .then(action => {
-          res.status(200).json(action);
-      })
-      .catch(() => res.status(500).json({ error: "The action's information could not be retrieved." }));
 })
 
 module.exports = router;
